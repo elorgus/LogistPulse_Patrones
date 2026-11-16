@@ -1,0 +1,21 @@
+package com.usfq.logistpulse.observer;
+
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ReplenishmentObserver {
+
+    private static final int REORDER_POINT = 25;
+
+    @EventListener
+    public void onStockChanged(StockChangedEvent event) {
+        if (event.remainingStock() <= REORDER_POINT) {
+            System.out.printf("[Observer - Reposición] ALERTA ROP: SKU %s bajó a %d unidades. Calculando orden EOQ...%n",
+                event.sku(), event.remainingStock());
+        } else {
+            System.out.printf("[Observer - Reposición] Stock saludable para SKU %s (%d unidades restantes).%n",
+                event.sku(), event.remainingStock());
+        }
+    }
+}
